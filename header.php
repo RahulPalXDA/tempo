@@ -44,7 +44,7 @@
 			<ul>
 				<li>
 					<form role="search" action="<?php echo site_url('/'); ?>" method="get">
-						<div class="header-search-box" style="position:relative;">
+						<div class="header-search-box">
 							<input type="search" 
 								id="header-search-input"
 								class="form-control"
