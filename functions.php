@@ -359,7 +359,7 @@ function live_search(){
     $keyword = sanitize_text_field($_POST['keyword']);
 
     $args = array(
-        'post_type' => array('page'),
+        'post_type' => array('page', 'post'),
         's'         => $keyword,
         'posts_per_page' => 5,
     );
