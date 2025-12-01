@@ -219,6 +219,58 @@ function red_graphic_cambridge_get_link_button( $args = [] ) {
 }
 
 /**
+ * Extend WordPress Search to include Custom Fields (ACF)
+ */
+
+// Join the postmeta table
+function red_graphic_cambridge_search_join( $join ) {
+    global $wpdb;
+
+    if ( is_search() || ( defined('DOING_AJAX') && DOING_AJAX && isset($_POST['action']) && $_POST['action'] == 'live_search' ) ) {
+        $join .=' LEFT JOIN '.$wpdb->postmeta. ' ON '. $wpdb->posts . '.ID = ' . $wpdb->postmeta . '.post_id ';
+    }
+
+    return $join;
+}
+add_filter('posts_join', 'red_graphic_cambridge_search_join' );
+
+// Modify the WHERE clause
+function red_graphic_cambridge_search_where( $where ) {
+    global $wpdb;
+
+    if ( is_search() || ( defined('DOING_AJAX') && DOING_AJAX && isset($_POST['action']) && $_POST['action'] == 'live_search' ) ) {
+        if ( isset( $_POST['keyword'] ) ) {
+            $keyword = $_POST['keyword']; // For AJAX
+        } else {
+            $keyword = get_search_query(); // For standard search
+        }
+        
+        $keyword = esc_sql( $wpdb->esc_like( $keyword ) );
+
+        if( !empty($keyword) ){
+            $where = preg_replace(
+                "/\(\s*".$wpdb->posts.".post_title\s+LIKE\s*(\'[^\']+\')\s*\)/",
+                "(".$wpdb->posts.".post_title LIKE $1) OR (".$wpdb->postmeta.".meta_value LIKE $1)", $where );
+        }
+    }
+
+    return $where;
+}
+add_filter( 'posts_where', 'red_graphic_cambridge_search_where' );
+
+// Prevent duplicates
+function red_graphic_cambridge_search_distinct( $where ) {
+    global $wpdb;
+
+    if ( is_search() || ( defined('DOING_AJAX') && DOING_AJAX && isset($_POST['action']) && $_POST['action'] == 'live_search' ) ) {
+        return "DISTINCT";
+    }
+
+    return $where;
+}
+add_filter( 'posts_distinct', 'red_graphic_cambridge_search_distinct' );
+
+/**
  * Reusable function to render an ACF image array
  */
 function red_graphic_cambridge_get_acf_image( $args = [] ) {
