@@ -333,7 +333,7 @@ function red_graphic_cambridge_extract_snippet( $text, $keyword ) {
     if ( ($start + $length) < mb_strlen( $text ) ) $snippet .= '...';
     
     // Highlight keyword
-    $snippet = preg_replace( '/(' . preg_quote( $keyword, '/' ) . ')/i', '<strong>$1</strong>', $snippet );
+    $snippet = preg_replace( '/(' . preg_quote( $keyword, '/' ) . ')/i', '<strong class="search-highlight">$1</strong>', $snippet );
     
     return $snippet;
 }
