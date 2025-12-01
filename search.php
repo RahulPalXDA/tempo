@@ -21,6 +21,11 @@ get_header();
 				<?php while ( have_posts() ) : the_post(); ?>
 					<div class="search-item">
 						<a href="<?php the_permalink(); ?>"><h3><?php the_title(); ?></h3></a>
+                        <?php 
+                        $snippet = red_graphic_cambridge_get_search_snippet( get_the_ID(), get_search_query() );
+                        if ( $snippet ) : ?>
+                            <div class="search-snippet"><?php echo $snippet; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
+                        <?php endif; ?>
 						<a href="<?php the_permalink(); ?>" class="view-page">View</a>
 					</div>
 				<?php endwhile; ?>

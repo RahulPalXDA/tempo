@@ -490,7 +490,13 @@ function live_search(){
         echo '<ul>';
 
         while($query->have_posts()): $query->the_post();
-            echo '<li class="search-suggestion-item" data-link="'.get_permalink().'">'. get_the_title(). '</li>';
+            $snippet = red_graphic_cambridge_get_search_snippet( get_the_ID(), $keyword );
+            echo '<li class="search-suggestion-item" data-link="'.get_permalink().'">';
+            echo '<span class="suggestion-title">' . get_the_title() . '</span>';
+            if ( $snippet ) {
+                echo '<span class="suggestion-snippet">' . $snippet . '</span>';
+            }
+            echo '</li>';
         endwhile;
 
         echo '</ul>';
