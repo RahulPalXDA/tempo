@@ -1527,7 +1527,6 @@ body:has(.contact_col2) .rgc_content_box_full_width {
 .header-search-box ul {
   flex-direction: column;
   gap: 0px;
-  max-height: 300px;
   overflow-y: auto;
   margin: 0;
   padding: 0;
