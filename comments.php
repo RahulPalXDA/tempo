@@ -32,15 +32,13 @@ if ( post_password_required() ) {
 			if ( '1' === $red_graphic_cambridge_comment_count ) {
 				printf(
 					/* translators: 1: title. */
-					esc_html__( 'One thought on &ldquo;%1$s&rdquo;', 'red-graphic-cambridge' ),
-					'<span>' . wp_kses_post( get_the_title() ) . '</span>'
+					esc_html__( 'One Comment', 'red-graphic-cambridge' )
 				);
 			} else {
 				printf( 
-					/* translators: 1: comment count number, 2: title. */
-					esc_html( _nx( '%1$s thought on &ldquo;%2$s&rdquo;', '%1$s thoughts on &ldquo;%2$s&rdquo;', $red_graphic_cambridge_comment_count, 'comments title', 'red-graphic-cambridge' ) ),
-					number_format_i18n( $red_graphic_cambridge_comment_count ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					'<span>' . wp_kses_post( get_the_title() ) . '</span>'
+					/* translators: 1: comment count number. */
+					esc_html( _nx( '%1$s Comment', '%1$s Comments', $red_graphic_cambridge_comment_count, 'comments title', 'red-graphic-cambridge' ) ),
+					number_format_i18n( $red_graphic_cambridge_comment_count ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				);
 			}
 			?>
@@ -54,6 +52,8 @@ if ( post_password_required() ) {
 				array(
 					'style'      => 'ol',
 					'short_ping' => true,
+					'avatar_size' => 60,
+					'callback'   => 'red_graphic_cambridge_comment_callback',
 				)
 			);
 			?>
@@ -71,7 +71,14 @@ if ( post_password_required() ) {
 
 	endif; // Check for have_comments().
 
-	comment_form();
+	comment_form(
+		array(
+			'title_reply_before' => '<h2 id="reply-title" class="comment-reply-title">',
+			'title_reply_after'  => '</h2>',
+			'class_submit'       => 'submit-button',
+			'label_submit'       => esc_html__( 'Post Comment', 'red-graphic-cambridge' ),
+		)
+	);
 	?>
 
 </div><!-- #comments -->

@@ -506,3 +506,69 @@ function live_search(){
 
     wp_die();
 }
+
+/**
+ * Custom comment callback for beautiful comment display
+ */
+function red_graphic_cambridge_comment_callback( $comment, $args, $depth ) {
+    ?>
+    <li <?php comment_class( empty( $args['has_children'] ) ? '' : 'parent' ); ?> id="comment-<?php comment_ID(); ?>">
+        <article id="div-comment-<?php comment_ID(); ?>" class="comment-body">
+            <div class="comment-author-avatar">
+                <?php if ( 0 != $args['avatar_size'] ) echo get_avatar( $comment, $args['avatar_size'] ); ?>
+            </div>
+            
+            <div class="comment-content-wrap">
+                <footer class="comment-meta">
+                    <div class="comment-author-info">
+                        <?php
+                        printf(
+                            '<b class="fn">%s</b>',
+                            get_comment_author_link( $comment )
+                        );
+                        ?>
+                    </div>
+                    
+                    <div class="comment-metadata">
+                        <a href="<?php echo esc_url( get_comment_link( $comment, $args ) ); ?>">
+                            <time datetime="<?php comment_time( 'c' ); ?>">
+                                <?php
+                                printf(
+                                    esc_html__( '%1$s at %2$s', 'red-graphic-cambridge' ),
+                                    get_comment_date( '', $comment ),
+                                    get_comment_time()
+                                );
+                                ?>
+                            </time>
+                        </a>
+                        
+                        <?php
+                        comment_reply_link(
+                            array_merge(
+                                $args,
+                                array(
+                                    'add_below' => 'div-comment',
+                                    'depth'     => $depth,
+                                    'max_depth' => $args['max_depth'],
+                                    'before'    => '<span class="reply-link">',
+                                    'after'     => '</span>',
+                                )
+                            )
+                        );
+                        ?>
+                        
+                        <?php edit_comment_link( esc_html__( 'Edit', 'red-graphic-cambridge' ), '<span class="edit-link">', '</span>' ); ?>
+                    </div>
+                </footer><!-- .comment-meta -->
+
+                <?php if ( '0' == $comment->comment_approved ) : ?>
+                    <p class="comment-awaiting-moderation"><?php esc_html_e( 'Your comment is awaiting moderation.', 'red-graphic-cambridge' ); ?></p>
+                <?php endif; ?>
+
+                <div class="comment-content">
+                    <?php comment_text(); ?>
+                </div><!-- .comment-content -->
+            </div><!-- .comment-content-wrap -->
+        </article><!-- .comment-body -->
+    <?php
+}
