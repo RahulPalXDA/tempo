@@ -1528,6 +1528,11 @@ body:has(.contact_col2) .rgc_content_box_full_width {
   gap: 0px;
   max-height: 300px;
   overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  background: #fff;
 }
 
 .header-search-box .no_data {
