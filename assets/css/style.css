@@ -1787,10 +1787,11 @@ body:has(.contact_col2) .rgc_content_box_full_width {
   max-width: calc(50% - 10px);
 }
 
+/* Post navigation link styles */
 .post-navigation a {
   display: block;
   padding: 20px;
-  background: #f9f9f9;
+  color: var(--primary-dark);
   border-radius: 0 0 20px 0;
   transition: all 0.3s ease;
   border-left: 4px solid var(--primary-dark);
@@ -1974,7 +1975,6 @@ body:has(.contact_col2) .rgc_content_box_full_width {
 .comment-respond {
   margin-top: 40px;
   padding: 30px;
-  background: #f9f9f9;
   border-radius: 0 0 30px 0;
 }
 
