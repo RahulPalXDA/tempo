@@ -1583,9 +1583,15 @@ body:has(.contact_col2) .rgc_content_box_full_width {
 
 /* Search Suggestions Dropdown */
 #search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  z-index: 999;
+  display: none;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  border: 1px solid #eee;
-  border-top: none;
   max-height: 400px;
   overflow-y: auto;
 }

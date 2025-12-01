@@ -56,8 +56,7 @@
 							<button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
 
 							<!-- Autocomplete suggestions -->
-							<div id="search-suggestions" 
-								style="position:absolute; top:100%; left:0; right:0; background:#fff; border:1px solid #ddd; z-index:999; display:none;">
+							<div id="search-suggestions">
 							</div>
 						</div>
 					</form>
