@@ -271,6 +271,74 @@ function red_graphic_cambridge_search_distinct( $where ) {
 add_filter( 'posts_distinct', 'red_graphic_cambridge_search_distinct' );
 
 /**
+ * Helper to get a snippet of text surrounding the keyword
+ * Checks Post Content first, then Custom Fields (ACF)
+ */
+function red_graphic_cambridge_get_search_snippet( $post_id, $keyword ) {
+    // 1. Try Main Content
+    $content = get_post_field( 'post_content', $post_id );
+    $content = strip_shortcodes( $content );
+    $content = wp_strip_all_tags( $content );
+    
+    $snippet = red_graphic_cambridge_extract_snippet( $content, $keyword );
+    
+    if ( $snippet ) {
+        return $snippet;
+    }
+
+    // 2. Try Custom Fields (ACF) if not found in content
+    $all_meta = get_post_meta( $post_id );
+    
+    foreach ( $all_meta as $key => $values ) {
+        // Skip hidden/protected meta keys (starting with _)
+        if ( substr( $key, 0, 1 ) === '_' ) continue;
+
+        foreach ( $values as $value ) {
+            // Only check string values (skip arrays/objects)
+            if ( is_string( $value ) ) {
+                $value = wp_strip_all_tags( $value );
+                $meta_snippet = red_graphic_cambridge_extract_snippet( $value, $keyword );
+                if ( $meta_snippet ) {
+                    return $meta_snippet;
+                }
+            }
+        }
+    }
+
+    // 3. Fallback: Return start of main content
+    return mb_substr( $content, 0, 100 ) . '...';
+}
+
+/**
+ * Internal helper to extract text around a keyword
+ */
+function red_graphic_cambridge_extract_snippet( $text, $keyword ) {
+    $text_lower = mb_strtolower( $text );
+    $keyword_lower = mb_strtolower( $keyword );
+    
+    $pos = mb_strpos( $text_lower, $keyword_lower );
+    
+    if ( $pos === false ) {
+        return false;
+    }
+    
+    // Extract context
+    $start = max( 0, $pos - 40 );
+    $length = 100; // Total length of snippet
+    
+    $snippet = mb_substr( $text, $start, $length );
+    
+    // Add ellipsis
+    if ( $start > 0 ) $snippet = '...' . $snippet;
+    if ( ($start + $length) < mb_strlen( $text ) ) $snippet .= '...';
+    
+    // Highlight keyword
+    $snippet = preg_replace( '/(' . preg_quote( $keyword, '/' ) . ')/i', '<strong>$1</strong>', $snippet );
+    
+    return $snippet;
+}
+
+/**
  * Reusable function to render an ACF image array
  */
 function red_graphic_cambridge_get_acf_image( $args = [] ) {
